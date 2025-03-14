@@ -21,19 +21,4 @@ app.use(express.json())
 routes(app);
 
 
-
-// Para excluir livro
-app.delete("/livros/:id", async (req, res) => {
-    try {
-        const livroDeletado = await livro.findByIdAndDelete(req.params.id);
-        if (livroDeletado) {
-            res.status(200).send("Livro excluído com sucesso");
-        } else {
-            res.status(404).send("Livro não encontrado");
-        }
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao excluir livro", error: error.message });
-    }
-});
-
 export default app;
