@@ -34,9 +34,12 @@ class LivroController {
         const novoLivro = req.body;
         try {
             const autorEncontrado = await autor.findById(novoLivro.autor);
+            if (!autorEncontrado) {
+                return res.status(404).json({ message: "Autor não encontrado" });
+            }
             const livroCompleto = { ...novoLivro, autor: { ...autorEncontrado._doc } };
             const livroCriado = await livro.create(livroCompleto);
-            res.status(201).json({ message: "criado com sucesso", livro: novoLivro });
+            res.status(201).json({ message: "criado com sucesso", livro: livroCriado });
         } catch (erro) {
             res.status(500).json({ message: `${erro.message} - Falha ao Cadastrar livro` });
         }
@@ -72,6 +75,17 @@ class LivroController {
             const editora = req.query.editora;
             const listarLivrosPorEditora = await livro.find({ editora: editora });
             res.status(200).json(listarLivrosPorEditora);
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar livros", error: error.message });
+        }
+    }
+
+    // Para listar livros por nome
+    static async listarLivrosPorNome(req, res) {
+        try {
+            const nome = req.query.nome;
+            const listarLivrosPorNome = await livro.find({ titulo: new RegExp(nome, 'i') });
+            res.status(200).json(listarLivrosPorNome);
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar livros", error: error.message });
         }
