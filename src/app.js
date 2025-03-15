@@ -17,8 +17,7 @@ conexao.once("open", () => {
 // Middleware para verificar se o servidor está rodando
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 routes(app);
-
 
 export default app;
