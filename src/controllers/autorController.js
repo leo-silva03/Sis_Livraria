@@ -61,6 +61,18 @@ class AutorController {
             res.status(500).json({ message: "Erro na exclusão do autor", error: error.message });
         }
     };
+
+    // Para listar por nome do Autor
+    // GET /autor/nome
+    static async listarAutorPorNome(req, res) {
+        try {
+            const nome = req.query.nome;
+            const autorEncontrado = await autor.find({ nome: new RegExp(nome, 'i') });
+            res.status(200).json(autorEncontrado);
+        } catch (error) {
+            res.status(500).json({ message: "Erro na requisição do autor", error: error.message });
+        }
+    }
 }
 
 export default AutorController;
